@@ -16,12 +16,15 @@ interface LessonPageProps {
   backTo: string;
   backLabel: string;
   markdown: string;
+  /** Optional hero illustration — imported via Vite (src/assets/), not a public/ string path. */
+  heroImage?: string;
+  heroImageAlt?: string;
 }
 
 // Generic full-lesson template shared by Discover, Stay Safe, and Build's
 // per-topic/per-tier pages — same markdown-rendering pattern already
 // proven for the Privacy page (react-markdown + remark-gfm, ?raw import).
-export function LessonPage({ icon: Icon, title, summary, badge, backTo, backLabel, markdown }: LessonPageProps) {
+export function LessonPage({ icon: Icon, title, summary, badge, backTo, backLabel, markdown, heroImage, heroImageAlt }: LessonPageProps) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <Link
@@ -37,6 +40,15 @@ export function LessonPage({ icon: Icon, title, summary, badge, backTo, backLabe
         {badge && <Badge label={badge.label} variant={badge.variant} />}
       </div>
       {summary && <p className="text-sm text-slate-400 max-w-xl mb-8">{summary}</p>}
+
+      {heroImage && (
+        <img
+          src={heroImage}
+          alt={heroImageAlt ?? title}
+          className="w-full max-w-md mx-auto rounded-2xl mb-8 border border-slate-700/40"
+          loading="lazy"
+        />
+      )}
 
       <article className="prose prose-invert prose-sm sm:prose-base max-w-none prose-headings:font-black prose-a:text-[var(--aarya-accent)] mb-10">
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ blockquote: LessonBlockquote }}>{markdown}</ReactMarkdown>
